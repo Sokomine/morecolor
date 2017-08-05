@@ -40,35 +40,63 @@ end
 
 
 -- color those nodes from default that look pretty acceptable
-morecolor.make_colorful("default:clay");
-morecolor.make_colorful("default:stone");
-morecolor.make_colorful("default:cobble");
-morecolor.make_colorful("default:sandstone");
-morecolor.make_colorful("default:sandstone_brick");
-morecolor.make_colorful("default:silver_sandstone");
-morecolor.make_colorful("default:silver_sandstone_brick");
-morecolor.make_colorful("default:gravel");
-morecolor.make_colorful("default:steelblock");
-morecolor.make_colorful("default:cloud");
 
-morecolor.make_colorful("default:wood");
-morecolor.make_colorful("default:aspen_wood");
-morecolor.make_colorful("default:pine_wood");
-morecolor.make_colorful("default:junglewood"); -- does not really work
-morecolor.make_colorful("default:brick"); -- looks horrible
+-- very useful for chests
 morecolor.make_colorful("default:chest");
-morecolor.make_colorful("cottages:wool_tent");
+morecolor.make_colorful("default:chest_locked");
 
+-- nice mostly white blocks that do not come as stairs/slabs/etc
 morecolor.make_colorful("default:coral_skeleton");
+morecolor.make_colorful("default:cloud");
+morecolor.make_colorful("default:gravel");
 
--- stairs and slabs etc work fine
-morecolor.make_colorful("stairs:stair_aspen_wood");
-morecolor.make_colorful("stairs:slab_aspen_wood");
+--morecolor.make_colorful("default:bronzeblock");
+--morecolor.make_colorful("default:tinblock");
+
+-- sand; does not exist as stair etc.
+morecolor.make_colorful("default:desert_sand");
+morecolor.make_colorful("default:sand");
+morecolor.make_colorful("default:silver_sand");
+
+-- some blocks that work quite well with paint
+-- those blocks come as stairs and slabs as well
+local materials = {
+	-- very nice whiteish material for building (just a bit rare)
+	"clay",
+	-- metals; use only steel as those others would remove too
+	-- many options for further colored metal blocks
+	"steelblock",
+	-- stony blocks
+	"cobble","mossycobble","desert_cobble",
+	"stone","stone_block", "stonebrick",
+	"desert_stone", "desert_stone_block", "desert_stone_brick",
+	"desert_sandstone", "desert_sandstone_block", "desert_sandstone_brick",
+	"sandstone","sandstone_block", "sandstonebrick",
+	"silver_sandstone","silver_sandstone_block", "silver_sandstone_brick",
+	-- the diffrent wooden plank types
+	"wood","junglewood","pine_wood","acacia_wood","aspen_wood"};
+for i,m in ipairs( materials ) do
+	morecolor.make_colorful("default:"..m);
+	morecolor.make_colorful("stairs:stair_"..m);
+	morecolor.make_colorful("stairs:slab_"..m);
+	morecolor.make_colorful("stairs:stair_inner_"..m);
+	morecolor.make_colorful("stairs:stair_outer_"..m);
+end
 
 
--- more for..fun..and testing
-morecolor.make_colorful("default:dirt_with_grass");
-morecolor.make_colorful("cottages:roof_straw");
+-- support for xconnected
+if( minetest.get_modpath( "xconnected" )) then
+	woods = {"","_pine","_jungle","_acacia","_aspen"};
+	local shapes = {"_c0", "_c1", "_c2", "_c3", "_c4", "_ln", "_lp" };
+	for i,w in ipairs( woods ) do
+		for j,n in ipairs( shapes ) do
+			morecolor.make_colorful("xconnected:fence_"..w..n);
+		end
+	end
+end
 
-morecolor.make_colorful("doors:door_steel_a");
-morecolor.make_colorful("doors:door_steel_b");
+morecolor.make_colorful("cottages:wool_tent");
+morecolor.make_colorful("cottages:loam");
+
+--morecolor.make_colorful("doors:door_steel_a");
+--morecolor.make_colorful("doors:door_steel_b");
