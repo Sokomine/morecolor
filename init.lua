@@ -29,7 +29,7 @@ end,
 	elseif( def.paramtype2 == "facedir" ) then
 		minetest.override_item( node_name, {
 			paramtype2 = "colorfacedir",
-			palette = "colorfacedir_palette.png", --"unifieddyes_palette_colorwallmounted.png",
+			palette = "morecolor_facedir_8colors_palette.png",
 --[[
 			on_punch = function( pos, node, puncher, pointed_thing )
 				minetest.swap_node( pos, {name=node.name, param2=(node.param2+32)});
@@ -158,3 +158,76 @@ end
 
 --morecolor.make_colorful("doors:door_steel_a");
 --morecolor.make_colorful("doors:door_steel_b");
+
+-- tell the colormachine about the palettes added here
+if( minetest.get_modpath( "colormachine")) then
+	local palette_name = "morecolor_facedir_8colors_palette.png";
+	-- this palette supports only 8 colors
+	colormachine.dye_palette_colors[     palette_name ] = { "red","orange","yellow","green","blue","magenta"};
+	-- normal shade only
+	colormachine.dye_palette_shades[     palette_name ] = { ''};
+	-- ..plus white and grey
+	colormachine.dye_palette_grey_names[ palette_name ] = { "white", "grey"};
+	-- the 8-color-palette is so small that we can easily add it manually here
+	colormachine.dye_palette[            palette_name ] = {
+		{ -1, -1,  1, "dye:white",    0, "ffffff"}, -- 1
+		{  1,  3, -1, "dye:red",      1, "8b0000"}, -- 2
+		{  2,  3, -1, "dye:orange",   2, "ffa500"}, -- 3
+		{  3,  3, -1, "dye:yellow",   3, "eeee00"}, -- 4
+		{  5,  3, -1, "dye:green",    4, "006400"}, -- 5
+		{  9,  3, -1, "dye:blue",     5, "00008b"}, -- 6
+		{ -1, -1,  3, "dye:grey",     6, "808080"}, -- 7
+		{ 11,  3, -1, "dye:magenta",  7, "ff1493"}, -- 8
+	};
+
+	local palette_name = "unifieddyes_palette_colorwallmounted.png";
+	-- more or less standard colors provided by the colormachine
+	colormachine.dye_palette_colors[     palette_name ] = {
+		"red","orange","yellow","lime","green","spring","cyan","azure","blue","violet","magenta","rose"};
+	-- pretty much the standard shades used by the colormachine
+	colormachine.dye_palette_shades[     palette_name ] = {
+		'light_', '', 'medium_', 'dark_'};
+
+	-- 24 colors
+	-- we have some left (standard: 15 dyes)
+	-- dark green is darker than normal green; necessary because
+	-- the colors ought to be the same as for the 8-color-palette
+	colormachine.dye_palette[ "unifieddyes_palette_colorwallmounted.png"] = {
+		{ -1, -1,  1, "dye:white",      0, "ffffff"}, --  1 white
+		{ -1, -1,  2, "",               1, "bfbfbf"}, --  2 light grey
+		{ -1, -1,  3, "dye:grey",       2, "808080"}, --  3 grey
+		{ -1, -1,  4, "dye:dark_grey",  3, "404040"}, --  4 dark grey
+		{ -1, -1,  5, "dye:black",      4, "141414"}, --  5 black
+
+		{  8,  1, -1, "",               5, "8080ff"}, --  6 azure?
+		{  2,  4, -1, "dye:brown",      6, "aa5500"}, --  7 ocker brown
+		{ 12,  1, -1, "dye:pink",       7, "ffc1da"}, --  8 pink
+
+		{  1,  1, -1, "",               8, "ff0000"}, --  9 bright red
+		{  2,  1, -1, "dye:orange",     9, "ff8000"}, -- 10 bright orange
+		{  3,  1, -1, "dye:yellow",    10, "ffff00"}, -- 11 bright yellow
+		{  5,  1, -1, "",              11, "00ff00"}, -- 12 bright green
+		{  7,  1, -1, "",              12, "00ffff"}, -- 13 bright cyan
+		{  9,  1, -1, "",              13, "0000ff"}, -- 14 bright blue
+		{ 10,  1, -1, "",              14, "8000ff"}, -- 15 bright violet
+		{ 11,  1, -1, "dye:magenta",   15, "ff00ff"}, -- 16 bright magenta
+
+		{  1,  3, -1, "dye:red",       16, "a80000"}, -- 17 dark red
+		{  2,  3, -1, "",              17, "a85400"}, -- 18 dark orange
+		{  3,  3, -1, "",              18, "a8a800"}, -- 19 dark yellow
+		{  5,  3, -1, "dye:dark_green",19, "00a800"}, -- 20 dark green
+		{  7,  3, -1, "dye:cyan",      20, "00a8a8"}, -- 21 dark cyan
+		{  9,  3, -1, "",              21, "0000a8"}, -- 22 dark blue
+		{ 10,  3, -1, "dye:violet",    22, "5400a8"}, -- 23 dark violet
+		{ 11,  3, -1, "",              23, "a800a8"}, -- 24 dark magenta
+
+		{  1,  5, -1, "",              24, "550000"}, -- 25 very dark red
+		{  2,  5, -1, "",              25, "552a00"}, -- 26 also: very dark orange
+		{  3,  5, -1, "",              26, "555500"}, -- 27 very dark yellow
+		{  5,  5, -1, "dye:green",     27, "005500"}, -- 28 (very dark green)
+		{  7,  5, -1, "",              28, "005500"}, -- 29 very dark cyan
+		{  9,  5, -1, "dye:blue",      29, "000055"}, -- 30 (very dark blue)
+		{ 10,  5, -1, "",              30, "2a0055"}, -- 31 very dark violet
+		{ 11,  5, -1, "",              31, "550055"}, -- 32 very dark mangeta
+	};
+end
