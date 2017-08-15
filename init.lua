@@ -14,6 +14,7 @@ morecolor.make_colorful = function( node_name )
 			paramtype2 = "colorwallmounted",
 			-- TODO: use other palette for darker nodes
 			palette = "unifieddyes_palette_colorwallmounted.png",
+--[[
 			-- TODO: handle this with the paintroller from the colormachine	
 			on_punch = function( pos, node, puncher, pointed_thing )
 				minetest.swap_node( pos, {name=node.name, param2=(node.param2+8)});
@@ -22,15 +23,18 @@ on_use = function(itemstack, user, pointed_thing)
   local meta = itemstack:get_meta();
   minetest.chat_send_player("singleplayer","itemstack: "..minetest.serialize( meta:to_table() ));
 end,
+--]]
 			});
 
 	elseif( def.paramtype2 == "facedir" ) then
 		minetest.override_item( node_name, {
 			paramtype2 = "colorfacedir",
 			palette = "colorfacedir_palette.png", --"unifieddyes_palette_colorwallmounted.png",
+--[[
 			on_punch = function( pos, node, puncher, pointed_thing )
 				minetest.swap_node( pos, {name=node.name, param2=(node.param2+32)});
 			end,
+--]]
 			});
 	else
 		print("[morecolor] ERROR: No color support possible for "..tostring( node_name )..
@@ -97,6 +101,60 @@ end
 
 morecolor.make_colorful("cottages:wool_tent");
 morecolor.make_colorful("cottages:loam");
+
+
+if( minetest.get_modpath("wool")) then
+	-- define two wool nodes
+	local groups = {snappy = 2, choppy = 2, oddly_breakable_by_hand = 3, wool = 1};
+	minetest.register_node("morecolor:wool", {
+		description = "Colorable Wool",
+		tiles = {"wool_white.png"},
+		is_ground_content = false,
+		groups = groups,
+		});
+	stairs.register_stair_and_slab(
+		"morecolorwool",
+		"morecolor:wool",
+		groups,
+		{"wool_white.png"},
+		"Colored Wool Stair",
+		"Colored Wool Slab"
+	);
+	morecolor.make_colorful("morecolor:wool");
+	local m = "coloredwool";
+	morecolor.make_colorful("stairs:stair_"..m);
+	morecolor.make_colorful("stairs:slab_"..m);
+	morecolor.make_colorful("stairs:stair_inner_"..m);
+	morecolor.make_colorful("stairs:stair_outer_"..m);
+
+	minetest.register_node("morecolor:carpet", {
+		description = "Colored Wool Carpet",
+		drawtype = "nodebox",
+		-- top, bottom, side1, side2, inner, outer
+		tiles = {"wool_white.png"},
+		paramtype = "light",
+		-- "wallmounted" would be nice as it would allow more colors,
+		-- but it would cause problems in other situations
+		paramtype2 = "facedir",
+		groups = groups,
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{ -0.5, -0.5, -0.50,  0.5, -0.5+1/16, 0.50},
+				},
+			},
+		selection_box = {
+			type = "fixed",
+			fixed = {
+				{ -0.5, -0.5, -0.50,  0.5, -0.5+1/16, 0.50},
+			},
+		},
+		on_place = minetest.rotate_node,
+		is_ground_content = false,
+		});
+	morecolor.make_colorful("morecolor:carpet");
+
+end
 
 --morecolor.make_colorful("doors:door_steel_a");
 --morecolor.make_colorful("doors:door_steel_b");
